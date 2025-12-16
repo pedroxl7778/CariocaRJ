@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carioca RP - Seu Roleplay no MTA</title>
+    <style>
+        /* Estilos CSS para o tema Azul */
+        :root {
+            --cor-principal: #1a73e8;    /* Azul primário (Google Blue) */
+            --cor-fundo: #0a192f;        /* Azul marinho escuro para o fundo */
+            --cor-texto: #e4e6eb;        /* Branco suave para o texto */
+            --cor-destaque: #66b2ff;     /* Azul claro para destaques */
+            --cor-card: #1c2b45;         /* Fundo de cards/notícias */
+            --cor-sucesso: #4CAF50;      /* Verde para Online */
+            --cor-perigo: #f44336;       /* Vermelho para Offline */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.6;
+        }
+
+        /* Menu de Navegação */
+        header {
+            background-color: var(--cor-card);
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: var(--cor-destaque);
+            font-size: 1.8em;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: var(--cor-texto);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--cor-destaque);
+            background-color: rgba(102, 178, 255, 0.1);
+        }
+
+        /* Seções Gerais */
+        section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 70vh;
+        }
+
+        h2 {
+            color: var(--cor-principal);
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--cor-principal);
+            padding-bottom: 10px;
+        }
+
+        /* Seção Inicial (Hero & Notícias) */
+        #inicial .hero {
+            background: linear-gradient(45deg, var(--cor-principal), #004d99);
+            padding: 80px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #inicial .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #inicial .hero p {
+            font-size: 1.2em;
+            color: #d1e5ff;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .news-card {
+            background-color: var(--cor-card);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-card h3 {
+            color: var(--cor-destaque);
+            margin-top: 0;
+        }
+
+        .news-card small {
+            display: block;
+            color: #8899ac;
+            margin-bottom: 10px;
+        }
+        
+        /* Seção VIP */
+        #vip .vip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .vip-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+        }
+
+        .vip-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .vip-header {
+            height: 180px; /* Altura para a imagem de fundo */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Camada escura para o texto aparecer sobre a imagem */
+        .vip-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+        }
+
+        .vip-title {
+            position: relative;
+            z-index: 10;
+        }
+
+        .vip-title h3 {
+            margin: 0;
+            font-size: 2em;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        
+        .vip-title .price-box {
+            display: flex;
+            align-items: baseline;
+            margin-top: 5px;
+        }
+        
+        .vip-title .price-box .price-old {
+            text-decoration: line-through;
+            color: #a0a0a0;
+            margin-right: 15px;
+            font-size: 1em;
+            font-weight: normal;
+        }
+        
+        .vip-title .price-box .price-current {
+            color: var(--cor-destaque);
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+
+        .vip-body {
+            background-color: var(--cor-card);
+            padding: 25px;
+        }
+
+        .vip-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vip-body ul li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #334466;
+            font-size: 0.95em;
+        }
+
+        .vip-body ul li::before {
+            content: '✅';
+            margin-right: 10px;
+        }
+
+        /* Botão Comprar (Novo) */
+        .btn-buy {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            text-align: center;
+            background-color: var(--cor-principal);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-buy:hover {
+            background-color: #0d5dd7; /* Azul mais escuro */
+            transform: translateY(-2px);
+        }
+        
+        /* Seção Como Jogar e Como Comprar */
+        #como-jogar .step-grid, #como-comprar .step-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start; /* Alinhamento ao topo para melhor leitura */
+            background-color: var(--cor-card);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-number {
+            font-size: 3em;
+            color: var(--cor-principal);
+            font-weight: bold;
+            margin-right: 30px;
+            padding-right: 30px;
+            border-right: 2px solid var(--cor-principal);
+            line-height: 1;
+        }
+        
+        .step-content h3 {
+            color: var(--cor-destaque);
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        /* Seção Conexão */
+        #conexao .status-box {
+            background-color: var(--cor-card);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-box p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .status-box strong {
+            display: block;
+            font-size: 2em;
+            color: var(--cor-destaque);
+            margin-bottom: 20px;
+        }
+
+        .server-status {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .status-online {
+            background-color: var(--cor-sucesso);
+            color: white;
+        }
+
+        .status-offline {
+            background-color: var(--cor-perigo);
+            color: white;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #061220;
+            color: #8899ac;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="#inicial" class="logo">Carioca RP</a>
+            <ul>
+                <li><a href="#inicial" class="nav-link active">Inicial</a></li>
+                <li><a href="#vip" class="nav-link">VIP</a></li>
+                <li><a href="#como-comprar" class="nav-link">Comprar VIP</a></li> 
+                <li><a href="#como-jogar" class="nav-link">Como Jogar</a></li>
+                <li><a href="#conexao" class="nav-link">Conexão</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="inicial">
+        <div class="hero">
+            <h1>Carioca RP | Onde a diversão começa!</h1>
+            <p>Seu Roleplay de alta qualidade no MTA. Conecte-se e faça sua história!</p>
+        </div>
+
+        <h2>📰 Últimas Notícias</h2>
+
+        <div class="news-grid">
+            <div class="news-card">
+                <h3>Sem Atualizações</h3>
+                <small>Publicado em: 15/12/2025</small>
+                <p>Sem Atualizações</p>
+            </div>
+            <div class="news-card">
+                <h3>Sem Atualizações</h3>
+                <small>Publicado em: 15/12/2025</small>
+                <p>Sem Atualizações</p>
+            </div>
+            <div class="news-card">
+                <h3>Sem Atualizações</h3>
+                <small>Publicado em: 15/12/2025</small>
+                <p>Sem Atualizações</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="vip">
+        <h2>✨ Seja VIP Carioca</h2>
+
+        <div class="vip-grid">
+            
+            <div class="vip-card">
+                <div class="vip-header" style="background-image: url('https://cdn.discordapp.com/attachments/1150970935617273898/1450270926158692392/Sem_Titulo-3.png?ex=6941ed8d&is=69409c0d&hm=7e9844a1a5a11b1fef00a9280e2597150b88099ea3ea211218a9cf3973370704&');">
+                    <div class="vip-title">
+                        <h3>BRONZE</h3>
+                        <div class="price-box">
+                            <span class="price-old">R$ 5,00</span>
+                            <span class="price-current">R$ 4,00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vip-body">
+                    <ul>
+                        <li>Prioridade na Conexão.</li>
+                        <li>TAG EXCLUSIVA NO CHAT.</li>
+                        <li>1 CARRO EXCLUSIVO MASTER.</li>
+                        <li>1 CARRO EXCLUSIVO MEGA.</li>
+                        <li>1 CARRO EXCLUSIVO PRO.</li>
+                        <li>20k de DINHEIRO AO ADQUIRIR.</li>
+                        <li>10.000 (SALÁRIO) por hora.</li>
+                    </ul>
+                    <a href="#como-comprar" class="btn-buy" target="_blank">COMPRAR AGORA</a>
+                </div>
+            </div>
+
+            <div class="vip-card">
+                <div class="vip-header" style="background-image: url('https://cdn.discordapp.com/attachments/1150970935617273898/1450270926158692392/Sem_Titulo-3.png?ex=6941ed8d&is=69409c0d&hm=7e9844a1a5a11b1fef00a9280e2597150b88099ea3ea211218a9cf3973370704&');">
+                    <div class="vip-title">
+                        <h3>PRATA</h3>
+                        <div class="price-box">
+                            <span class="price-old">R$ 7,00</span>
+                            <span class="price-current">R$ 6,00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vip-body">
+                    <ul>
+                        <li>Prioridade na Conexão.</li>
+                        <li>TAG EXCLUSIVA NO CHAT.</li>
+                        <li>1 CARRO EXCLUSIVO MEGA.</li>
+                        <li>1 CARRO EXCLUSIVO PRO.</li>
+                        <li>10k de DINHEIRO AO ADQUIRIR.</li>
+                        <li>7.000 (SALÁRIO) por hora.</li>
+                    </ul>
+                    <a href="#como-comprar" class="btn-buy" target="_blank">COMPRAR AGORA</a>
+                </div>
+            </div>
+
+            <div class="vip-card">
+                <div class="vip-header" style="background-image: url('https://cdn.discordapp.com/attachments/1150970935617273898/1450270926158692392/Sem_Titulo-3.png?ex=6941ed8d&is=69409c0d&hm=7e9844a1a5a11b1fef00a9280e2597150b88099ea3ea211218a9cf3973370704&');">
+                    <div class="vip-title">
+                        <h3>RUBI</h3>
+                        <div class="price-box">
+                            <span class="price-old">R$ 11,00</span>
+                            <span class="price-current">R$ 10,00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vip-body">
+                    <ul>
+                        <li>Prioridade na Conexão.</li>
+                        <li>TAG EXCLUSIVA NO CHAT.</li>
+                        <li>1 CARRO EXCLUSIVO PRO.</li>
+                        <li>5k de DINHEIRO AO ADQUIRIR.</li>
+                        <li>5.000 (SALÁRIO) por hora.</li>
+                    </ul>
+                    <a href="#como-comprar" class="btn-buy" target="_blank">COMPRAR AGORA</a>
+                </div>
+            </div>
+
+        </div>
+        
+        <p style="margin-top: 40px; text-align: center; color: var(--cor-destaque);">Aproveite os descontos de natal por tempo limitado!</p>
+    </section>
+    
+    <section id="como-comprar" style="min-height: 80vh;">
+        <h2>💳 Como Comprar seu VIP</h2>
+
+        <p style="font-size: 1.1em; margin-bottom: 30px;">Siga os passos abaixo para adquirir seu plano VIP e aproveitar todos os benefícios:</p>
+
+        <div class="step-grid">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Escolha o Plano</h3>
+                    <p>Volte para a aba **VIP** e escolha o plano que melhor se encaixa no seu estilo de jogo (BRONZE, PRATA ou RUBI).</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Entre em Contato</h3>
+                    <p>Entre em contato com a nossa equipe de vendas através do nosso Discord oficial.</p>
+                    <p>Exemplo de Contato: <a href="https://discord.gg/aEUpnDsVWv" style="color: var(--cor-destaque); font-weight: bold;">Discord Oficial</a>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Realize o Pagamento</h3>
+                    <p>Informe o plano desejado e siga as instruções do vendedor para realizar o pagamento (PIX, Cartão, etc.).</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Ativação</h3>
+                    <p>Após a confirmação do pagamento, seu VIP será ativado em até 10 minutos no servidor. Aproveite os benefícios!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-jogar">
+        <h2>🎮 Como Jogar no Carioca RP</h2>
+
+        <div class="step-grid">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Baixe o Jogo</h3>
+                    <p>Para jogar conosco é simples, basta ter o **GTA San Andreas** e baixar o **Multi Theft Auto (MTA)**. Certifique-se de que o seu jogo está atualizado e funcionando corretamente.</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Abra o MTA</h3>
+                    <p>Abra o MTA e clique em **"Conectar"** no menu principal. Em seguida, digite o IP do nosso servidor para iniciar a conexão.</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Crie sua conta</h3>
+                    <p>Ao conectar pela primeira vez, você será redirecionado para a criação da sua conta. Escolha uma senha segura e um nome de personagem apropriado ao Roleplay. **Divirta-se!**</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="conexao">
+        <h2>🔗 Status do Servidor</h2>
+
+        <div class="status-box">
+            <p>Endereço de Conexão (IP + Porta):</p>
+            <strong id="ip-display">mta.seuip.com:22003</strong>
+
+            <p>Status Atual:</p>
+            <div id="server-status-display" class="server-status status-online">
+                Online
+            </div>
+            
+            <p style="margin-top: 20px; color: #8899ac;">**Nota:** Este status é **simulado**. Para a checagem em tempo real, um script de servidor (backend) é necessário.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Carioca RP. Todos os direitos reservados. | Desenvolvido com HTML/CSS.</p>
+    </footer>
+
+    <script>
+        // JavaScript para simular o status e adicionar navegação suave
+        
+        // Simulação de Status do Servidor
+        function checkServerStatus() {
+            const statusDisplay = document.getElementById('server-status-display');
+            // Mantendo a simulação ONLINE
+            const isOnline = false; 
+
+            if (isOnline) {
+                statusDisplay.textContent = 'Online';
+                statusDisplay.classList.remove('status-offline');
+                statusDisplay.classList.add('status-online');
+            } else {
+                statusDisplay.textContent = 'Offline';
+                statusDisplay.classList.remove('status-online');
+                statusDisplay.classList.add('status-offline');
+            }
+        }
+
+        // Chama a função ao carregar a página
+        checkServerStatus();
+
+        // Script para navegação suave e destaque do menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            // Função para rolar suavemente
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    // Se o link for para a nova aba (#como-comprar), ele abrirá uma nova página com o mesmo URL
+                    if (targetId === 'como-comprar') {
+                        // Permite que o link #como-comprar abra em nova aba (target="_blank" no HTML do botão Comprar)
+                        return true; 
+                    } else {
+                        // Para links internos da mesma página, faz a rolagem suave
+                        e.preventDefault();
+                        if (targetSection) {
+                            window.scrollTo({
+                                top: targetSection.offsetTop - document.querySelector('header').offsetHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Função para destacar o link ativo (Scroll Spy)
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - document.querySelector('header').offsetHeight;
+                    if (scrollY >= sectionTop - 100) { // -100px para ajuste visual
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
